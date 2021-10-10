@@ -8,6 +8,7 @@ const defaultCartState = {
 };
 
 const cartReducer = (state, action) => {
+  //reducer, used to modify the local state based on the action
   if (action.type === "ADD") {
     const updatedTotalAmount =
       state.totalAmount + action.item.price * action.item.amount;
@@ -81,6 +82,8 @@ const CartProvider = (props) => {
   };
 
   const cartContext = {
+    //here are the values store in the global store
+    //the current context value(local state at the moment)
     items: cartState.items,
     totalAmount: cartState.totalAmount,
     addItem: addItemToCartHandler,
@@ -89,6 +92,7 @@ const CartProvider = (props) => {
   };
 
   return (
+    //wrap the current local state value as a wrapper which will be imported to App.js
     <CartContext.Provider value={cartContext}>
       {props.children}
     </CartContext.Provider>
