@@ -3,12 +3,14 @@ import { useReducer } from "react";
 import CartContext from "./cart-context";
 
 const defaultCartState = {
+  //will be used in reducer
   items: [],
   totalAmount: 0,
 };
 
+//logics are here in the reducer
 const cartReducer = (state, action) => {
-  //reducer, used to modify the local state based on the action
+  //reducer, used to modify the local state based on the action, change the state over time
   if (action.type === "ADD") {
     const updatedTotalAmount =
       state.totalAmount + action.item.price * action.item.amount;
@@ -29,7 +31,7 @@ const cartReducer = (state, action) => {
       updatedItems = [...state.items];
       updatedItems[existingCartItemIndex] = updatedItem;
     } else {
-      updatedItems = state.items.concat(action.item); //add the item
+      updatedItems = state.items.concat(action.item); //add the item which returns a new array (immutable way), do not use push which adds to the existing array
     }
 
     return {
@@ -64,11 +66,14 @@ const cartReducer = (state, action) => {
 };
 
 const CartProvider = (props) => {
+  //manage context data and provide that context to all components that want to access to the data
   const [cartState, dispatchCartAction] = useReducer(
-    cartReducer,
-    defaultCartState
+    //1st state snapshot, 2nd dispatch action to reducer
+    cartReducer, //reducer function
+    defaultCartState //initial state
   );
 
+  //dispatch actions
   const addItemToCartHandler = (item) => {
     dispatchCartAction({ type: "ADD", item: item });
   };
@@ -82,7 +87,7 @@ const CartProvider = (props) => {
   };
 
   const cartContext = {
-    //here are the values store in the global store
+    //here will be dynamic, are the values store in the global store
     //the current context value(local state at the moment)
     items: cartState.items,
     totalAmount: cartState.totalAmount,
